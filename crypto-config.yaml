@@ -1,0 +1,68 @@
+# Copyright IBM Corp. All Rights Reserved.
+# Modifications by kehm
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+# Configuration file for the Cryto Generator tool
+#
+
+PeerOrgs:
+  - Name: Hospital1
+    Domain: hospital1.example.com
+    EnableNodeOUs: true
+    Specs:
+      - Hostname: orderer0
+        CommonName: orderer0.hospital1.example.com
+        SANS:
+          - "localhost"
+          - "172.18.0.100"
+      - Hostname: peer0
+        CommonName: peer0.hospital1.example.com
+        SANS:
+          - "localhost"
+          - "172.18.0.40"
+      - Hostname: peer1
+        CommonName: peer1.hospital1.example.com
+        SANS:
+          - "localhost"
+          - "172.18.0.50"
+
+  - Name: Pharmacy1
+    Domain: pharmacy1.example.com
+    EnableNodeOUs: true
+    Specs:
+      - Hostname: orderer0
+        CommonName: orderer0.pharmacy1.example.com
+        SANS:
+          - "localhost"
+          - "172.18.0.110"
+      - Hostname: peer0
+        CommonName: peer0.pharmacy1.example.com
+        SANS:
+          - "localhost"
+          - "172.18.0.60"
+      - Hostname: peer1
+        CommonName: peer1.pharmacy1.example.com
+        SANS:
+          - "localhost"
+          - "172.18.0.70"
+
+  - Name: Practitioner1
+    Domain: practitioner1.example.com
+    EnableNodeOUs: true
+    Specs:
+      - Hostname: orderer0
+        CommonName: orderer0.practitioner1.example.com
+        SANS:
+          - "localhost"
+          - "172.18.0.120"
+      - Hostname: peer0
+        CommonName: peer0.practitioner1.example.com
+        SANS:
+          - "localhost"
+          - "172.18.0.80"
+      - Hostname: peer1
+        CommonName: peer1.practitioner1.example.com
+        SANS:
+          - "localhost"
+          - "172.18.0.90"

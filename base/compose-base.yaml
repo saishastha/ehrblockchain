@@ -1,0 +1,228 @@
+# Copyright IBM Corp. All Rights Reserved.
+# Modifications by kehm
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+# Docker configuration file
+#
+
+version: '2'
+
+services:
+
+  ca.hospital1.example.com:
+    container_name: ca.hospital1.example.com
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca.hospital1.example.com
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server/ca.hospital1.example.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server/${HOSPITAL1_CA_KEYFILE}
+      #- FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server/ca.hospital1.example.com-cert.pem
+      #- FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server/${HOSPITAL1_CA_KEYFILE}
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    #command: sh -c 'fabric-ca-server start -b admin:adminpw -d --tls.enabled'
+    volumes:
+      - ../crypto-config/peerOrganizations/hospital1.example.com/ca/:/etc/hyperledger/fabric-ca-server
+    ports:
+      - 7054:7054
+
+  ca.pharmacy1.example.com:
+    container_name: ca.pharmacy1.example.com
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca.pharmacy1.example.com
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server/ca.pharmacy1.example.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server/${PHARMACY1_CA_KEYFILE}
+      #- FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server/ca.pharmacy1.example.com-cert.pem
+      #- FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server/${PHARMACY1_CA_KEYFILE}
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    #command: sh -c 'fabric-ca-server start -b admin:adminpw -d --tls.enabled'
+    volumes:
+      - ../crypto-config/peerOrganizations/pharmacy1.example.com/ca/:/etc/hyperledger/fabric-ca-server
+    ports:
+      - 8054:7054
+
+  ca.practitioner1.example.com:
+    container_name: ca.practitioner1.example.com
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca.practitioner1.example.com
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server/ca.practitioner1.example.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server/${PRACTITIONER1_CA_KEYFILE}
+      #- FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server/ca.practitioner1.example.com-cert.pem
+      #- FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server/${PRACTITIONER1_CA_KEYFILE}
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    #command: sh -c 'fabric-ca-server start -b admin:adminpw -d --tls.enabled'
+    volumes:
+      - ../crypto-config/peerOrganizations/practitioner1.example.com/ca/:/etc/hyperledger/fabric-ca-server
+    ports:
+      - 9054:7054
+
+  orderer0.hospital1.example.com:
+    container_name: orderer0.hospital1.example.com
+    extends:
+      file: peer-base.yaml
+      service: orderer-base
+    environment:
+      - ORDERER_GENERAL_LOCALMSPID=Hospital1MSP
+    volumes:
+      - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - ../crypto-config/peerOrganizations/hospital1.example.com/peers/orderer0.hospital1.example.com/msp:/var/hyperledger/orderer/msp
+      - ../crypto-config/peerOrganizations/hospital1.example.com/peers/orderer0.hospital1.example.com/tls/:/var/hyperledger/orderer/tls
+      - orderer0.hospital1.example.com:/var/hyperledger/production/orderer
+    ports:
+      - 7050:7050
+
+  orderer0.pharmacy1.example.com:
+    container_name: orderer0.pharmacy1.example.com
+    extends:
+      file: peer-base.yaml
+      service: orderer-base
+    environment:
+      - ORDERER_GENERAL_LOCALMSPID=Pharmacy1MSP
+    volumes:
+      - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - ../crypto-config/peerOrganizations/pharmacy1.example.com/peers/orderer0.pharmacy1.example.com/msp:/var/hyperledger/orderer/msp
+      - ../crypto-config/peerOrganizations/pharmacy1.example.com/peers/orderer0.pharmacy1.example.com/tls/:/var/hyperledger/orderer/tls
+      - orderer0.pharmacy1.example.com:/var/hyperledger/production/orderer
+    ports:
+      - 8050:7050
+
+  orderer0.practitioner1.example.com:
+    container_name: orderer0.practitioner1.example.com
+    extends:
+      file: peer-base.yaml
+      service: orderer-base
+    environment:
+      - ORDERER_GENERAL_LOCALMSPID=Practitioner1MSP
+    volumes:
+      - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - ../crypto-config/peerOrganizations/practitioner1.example.com/peers/orderer0.practitioner1.example.com/msp:/var/hyperledger/orderer/msp
+      - ../crypto-config/peerOrganizations/practitioner1.example.com/peers/orderer0.practitioner1.example.com/tls/:/var/hyperledger/orderer/tls
+      - orderer0.practitioner1.example.com:/var/hyperledger/production/orderer
+    ports:
+      - 9050:7050
+
+  peer0.hospital1.example.com:
+    container_name: peer0.hospital1.example.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.hospital1.example.com
+      - CORE_PEER_ADDRESS=peer0.hospital1.example.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.hospital1.example.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.hospital1.example.com:7051
+      - CORE_PEER_LOCALMSPID=Hospital1MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/hospital1.example.com/peers/peer0.hospital1.example.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/hospital1.example.com/peers/peer0.hospital1.example.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.hospital1.example.com:/var/hyperledger/production
+    ports:
+      - 7051:7051
+      - 7053:7053
+
+  peer1.hospital1.example.com:
+    container_name: peer1.hospital1.example.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.hospital1.example.com
+      - CORE_PEER_ADDRESS=peer1.hospital1.example.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.hospital1.example.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.hospital1.example.com:7051
+      - CORE_PEER_LOCALMSPID=Hospital1MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/hospital1.example.com/peers/peer1.hospital1.example.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/hospital1.example.com/peers/peer1.hospital1.example.com/tls:/etc/hyperledger/fabric/tls
+        - peer1.hospital1.example.com:/var/hyperledger/production
+
+    ports:
+      - 8051:7051
+      - 8053:7053
+
+  peer0.pharmacy1.example.com:
+    container_name: peer0.pharmacy1.example.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.pharmacy1.example.com
+      - CORE_PEER_ADDRESS=peer0.pharmacy1.example.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.pharmacy1.example.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.pharmacy1.example.com:7051
+      - CORE_PEER_LOCALMSPID=Pharmacy1MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/pharmacy1.example.com/peers/peer0.pharmacy1.example.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/pharmacy1.example.com/peers/peer0.pharmacy1.example.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.pharmacy1.example.com:/var/hyperledger/production
+    ports:
+      - 9051:7051
+      - 9053:7053
+
+  peer1.pharmacy1.example.com:
+    container_name: peer1.pharmacy1.example.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.pharmacy1.example.com
+      - CORE_PEER_ADDRESS=peer1.pharmacy1.example.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.pharmacy1.example.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.pharmacy1.example.com:7051
+      - CORE_PEER_LOCALMSPID=Pharmacy1MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/pharmacy1.example.com/peers/peer1.pharmacy1.example.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/pharmacy1.example.com/peers/peer1.pharmacy1.example.com/tls:/etc/hyperledger/fabric/tls
+        - peer1.pharmacy1.example.com:/var/hyperledger/production
+    ports:
+      - 10051:7051
+      - 10053:7053
+
+  peer0.practitioner1.example.com:
+    container_name: peer0.practitioner1.example.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.practitioner1.example.com
+      - CORE_PEER_ADDRESS=peer0.practitioner1.example.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.practitioner1.example.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.practitioner1.example.com:7051
+      - CORE_PEER_LOCALMSPID=Practitioner1MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/practitioner1.example.com/peers/peer0.practitioner1.example.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/practitioner1.example.com/peers/peer0.practitioner1.example.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.practitioner1.example.com:/var/hyperledger/production
+    ports:
+      - 11051:7051
+      - 11053:7053
+
+  peer1.practitioner1.example.com:
+    container_name: peer1.practitioner1.example.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.practitioner1.example.com
+      - CORE_PEER_ADDRESS=peer1.practitioner1.example.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.practitioner1.example.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.practitioner1.example.com:7051
+      - CORE_PEER_LOCALMSPID=Practitioner1MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/practitioner1.example.com/peers/peer1.practitioner1.example.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/practitioner1.example.com/peers/peer1.practitioner1.example.com/tls:/etc/hyperledger/fabric/tls
+        - peer1.practitioner1.example.com:/var/hyperledger/production
+    ports:
+      - 12051:7051
+      - 12053:7053

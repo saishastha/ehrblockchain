@@ -1,0 +1,161 @@
+# Copyright IBM Corp. All Rights Reserved.
+# Modifications by kehm
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+# Configuration file for the Configuration Transaction Generator tool
+#
+
+Organizations:
+    - &Hospital1
+        Name: Hospital1MSP
+        ID: Hospital1MSP
+        MSPDir: crypto-config/peerOrganizations/hospital1.example.com/msp
+        AnchorPeers:
+            - Host: peer0.hospital1.example.com
+              Port: 7051
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('Hospital1MSP.admin', 'Hospital1MSP.peer', 'Hospital1MSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('Hospital1MSP.admin', 'Hospital1MSP.client', 'Hospital1MSP.member')"
+            Admins:
+                Type: Signature
+                Rule: "OR('Hospital1MSP.admin')"
+    - &Pharmacy1
+        Name: Pharmacy1MSP
+        ID: Pharmacy1MSP
+        MSPDir: crypto-config/peerOrganizations/pharmacy1.example.com/msp
+        AnchorPeers:
+            - Host: peer0.pharmacy1.example.com
+              Port: 7051
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('Pharmacy1MSP.admin', 'Pharmacy1MSP.peer', 'Pharmacy1MSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('Pharmacy1MSP.admin', 'Pharmacy1MSP.client', 'Pharmacy1MSP.member')"
+            Admins:
+                Type: Signature
+                Rule: "OR('Pharmacy1MSP.admin')"
+    - &Practitioner1
+        Name: Practitioner1MSP
+        ID: Practitioner1MSP
+        MSPDir: crypto-config/peerOrganizations/practitioner1.example.com/msp
+        AnchorPeers:
+            - Host: peer0.practitioner1.example.com
+              Port: 7051
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('Practitioner1MSP.admin', 'Practitioner1MSP.peer', 'Practitioner1MSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('Practitioner1MSP.admin', 'Practitioner1MSP.client', 'Practitioner1MSP.member')"
+            Admins:
+                Type: Signature
+                Rule: "OR('Practitioner1MSP.admin')"
+
+Capabilities:
+    Channel: &ChannelCapabilities
+        V1_3: true
+    Orderer: &OrdererCapabilities
+        V1_1: true
+    Application: &ApplicationCapabilities
+        V1_3: true
+
+Application: &ApplicationDefaults
+    Organizations:
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+  
+Orderer: &OrdererDefaults
+    OrdererType: etcdraft
+    EtcdRaft:
+        Consenters:
+        - Host: orderer0.hospital1.example.com
+          Port: 7050
+          ClientTLSCert: crypto-config/peerOrganizations/hospital1.example.com/peers/orderer0.hospital1.example.com/tls/server.crt
+          ServerTLSCert: crypto-config/peerOrganizations/hospital1.example.com/peers/orderer0.hospital1.example.com/tls/server.crt
+        - Host: orderer0.pharmacy1.example.com
+          Port: 7050
+          ClientTLSCert: crypto-config/peerOrganizations/pharmacy1.example.com/peers/orderer0.pharmacy1.example.com/tls/server.crt
+          ServerTLSCert: crypto-config/peerOrganizations/pharmacy1.example.com/peers/orderer0.pharmacy1.example.com/tls/server.crt
+        - Host: orderer0.practitioner1.example.com
+          Port: 7050
+          ClientTLSCert: crypto-config/peerOrganizations/practitioner1.example.com/peers/orderer0.practitioner1.example.com/tls/server.crt
+          ServerTLSCert: crypto-config/peerOrganizations/practitioner1.example.com/peers/orderer0.practitioner1.example.com/tls/server.crt
+    Addresses:
+          - orderer0.hospital1.example.com:7050
+          - orderer0.pharmacy1.example.com:7050
+          - orderer0.practitioner1.example.com:7050
+    Organizations:
+    - *Hospital1
+    - *Pharmacy1
+    - *Practitioner1
+    Capabilities:
+        <<: *OrdererCapabilities
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+
+Channel: &ChannelDefaults
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+    Capabilities:
+        <<: *ChannelCapabilities
+
+Profiles:
+    InitialOrgsOrdererGenesis:
+        Capabilities:
+            <<: *ChannelCapabilities
+        Orderer:
+            <<: *OrdererDefaults
+            Organizations:
+                - *Hospital1
+                - *Pharmacy1
+                - *Practitioner1
+            Capabilities:
+                <<: *OrdererCapabilities
+        Consortiums:
+            ProviderConsortium:
+                Organizations:
+                    - *Hospital1
+                    - *Pharmacy1
+                    - *Practitioner1
+    InitialOrgsChannel:
+        Consortium: ProviderConsortium
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *Hospital1
+                - *Pharmacy1
+                - *Practitioner1
+            Capabilities:
+                <<: *ApplicationCapabilities

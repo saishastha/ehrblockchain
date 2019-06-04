@@ -1,0 +1,171 @@
+# Copyright IBM Corp. All Rights Reserved.
+# Modifications by kehm
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+# Docker configuration with Raft ordering service
+#
+
+version: '2'
+
+volumes:
+  ca.hospital1.example.com:
+  ca.pharmacy1.example.com:
+  ca.practitioner1.example.com:
+  orderer0.hospital1.example.com:
+  orderer0.pharmacy1.example.com:
+  orderer0.practitioner1.example.com:
+  peer0.hospital1.example.com:
+  peer1.hospital1.example.com:
+  peer0.pharmacy1.example.com:
+  peer1.pharmacy1.example.com:
+  peer0.practitioner1.example.com:
+  peer1.practitioner1.example.com:
+
+networks:
+  ehrnetwork:
+    ipam:
+      config:
+        - subnet: 172.18.0.0/24
+    
+services:
+  ca.hospital1.example.com:
+    extends:
+      file:   base/compose-base.yaml
+      service: ca.hospital1.example.com
+    container_name: ca.hospital1.example.com
+    networks:
+      - ehrnetwork
+
+  ca.pharmacy1.example.com:
+    extends:
+      file:   base/compose-base.yaml
+      service: ca.pharmacy1.example.com
+    container_name: ca.pharmacy1.example.com
+    networks:
+      - ehrnetwork
+
+  ca.practitioner1.example.com:
+    extends:
+      file:   base/compose-base.yaml
+      service: ca.practitioner1.example.com
+    container_name: ca.practitioner1.example.com
+    networks:
+      - ehrnetwork
+
+  orderer0.hospital1.example.com:
+    extends:
+      file:   base/compose-base.yaml
+      service: orderer0.hospital1.example.com
+    container_name: orderer0.hospital1.example.com
+    networks:
+      ehrnetwork:
+        ipv4_address: 172.18.0.100
+      
+  orderer0.pharmacy1.example.com:
+    extends:
+      file:   base/compose-base.yaml
+      service: orderer0.pharmacy1.example.com
+    container_name: orderer0.pharmacy1.example.com
+    networks:
+      ehrnetwork:
+        ipv4_address: 172.18.0.110
+
+  orderer0.practitioner1.example.com:
+    extends:
+      file:   base/compose-base.yaml
+      service: orderer0.practitioner1.example.com
+    container_name: orderer0.practitioner1.example.com
+    networks:
+      ehrnetwork:
+        ipv4_address: 172.18.0.120
+
+  peer0.hospital1.example.com:
+    container_name: peer0.hospital1.example.com
+    extends:
+      file:  base/compose-base.yaml
+      service: peer0.hospital1.example.com
+    networks:
+      ehrnetwork:
+        ipv4_address: 172.18.0.40      
+
+  peer1.hospital1.example.com:
+    container_name: peer1.hospital1.example.com
+    extends:
+      file:  base/compose-base.yaml
+      service: peer1.hospital1.example.com
+    networks:
+      ehrnetwork:
+        ipv4_address: 172.18.0.50     
+      
+  peer0.pharmacy1.example.com:
+    container_name: peer0.pharmacy1.example.com
+    extends:
+      file:  base/compose-base.yaml
+      service: peer0.pharmacy1.example.com
+    networks:
+      ehrnetwork:
+        ipv4_address: 172.18.0.60     
+
+  peer1.pharmacy1.example.com:
+    container_name: peer1.pharmacy1.example.com
+    extends:
+      file:  base/compose-base.yaml
+      service: peer1.pharmacy1.example.com
+    networks:
+      ehrnetwork:
+        ipv4_address: 172.18.0.70
+
+  peer0.practitioner1.example.com:
+    container_name: peer0.practitioner1.example.com
+    extends:
+      file:  base/compose-base.yaml
+      service: peer0.practitioner1.example.com
+    networks:
+      ehrnetwork:
+        ipv4_address: 172.18.0.80     
+
+  peer1.practitioner1.example.com:
+    container_name: peer1.practitioner1.example.com
+    extends:
+      file:  base/compose-base.yaml
+      service: peer1.practitioner1.example.com
+    networks:
+      ehrnetwork:
+        ipv4_address: 172.18.0.90
+
+  cli0:
+    container_name: cli0
+    image: hyperledger/fabric-tools
+    tty: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_ID=cli0
+      - CORE_PEER_ADDRESS=peer0.hospital1.example.com:7051
+      - CORE_PEER_LOCALMSPID=Hospital1MSP
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/hospital1.example.com/peers/peer0.hospital1.example.com/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/hospital1.example.com/peers/peer0.hospital1.example.com/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/hospital1.example.com/peers/peer0.hospital1.example.com/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/hospital1.example.com/users/Admin@hospital1.example.com/msp
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./chaincode/:/opt/gopath/src/github.com/chaincode
+        - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+        #- ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
+        - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+    networks:
+      - ehrnetwork
+    depends_on:
+      - orderer0.hospital1.example.com
+      - orderer0.pharmacy1.example.com
+      - orderer0.practitioner1.example.com
+      - peer0.practitioner1.example.com
+      - peer1.practitioner1.example.com
+      - peer0.pharmacy1.example.com
+      - peer1.pharmacy1.example.com
+      - peer0.hospital1.example.com
+      - peer1.hospital1.example.com

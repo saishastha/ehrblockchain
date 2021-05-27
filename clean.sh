@@ -1,6 +1,6 @@
 #!/bin/bash
 #SPDX-License-Identifier: Apache-2.0
-#Author: kehm
+#Author: karthik
 
 #Tear down the network and remove generated artifacts and cryptographic material
 #NOTE:Stops and removes ALL docker containers running on your system! Sudo required.

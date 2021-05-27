@@ -1,6 +1,6 @@
 #!/bin/bash
 #SPDX-License-Identifier: Apache-2.0
-#Author: kehm
+#Author: karthik
 
 #Start the required docker containers, create channel and instantiate chaincode
 #Create required cryptographic material and channel configuration (generate.sh) before running this script

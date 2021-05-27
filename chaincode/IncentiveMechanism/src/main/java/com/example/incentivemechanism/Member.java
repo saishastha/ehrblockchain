@@ -4,7 +4,7 @@ package main.java.com.example.incentivemechanism;
 /**
  * Class to represent a member of the blockchain network
  *
- * @author kehm
+ * @author karthik
  */
 public class Member {
 

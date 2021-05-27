@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * Class to represent a Summary Contract instance
  *
- * @author kehm
+ * @author karthik
  */
 public class SCInstance {
 

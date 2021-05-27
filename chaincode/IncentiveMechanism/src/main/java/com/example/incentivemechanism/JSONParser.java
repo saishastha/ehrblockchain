@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 /**
  * JSON Parser utilities
  *
- * @author kehm
+ * @author karthik
  */
 public class JSONParser {
 

@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Class to represent a Record Relationship Contract instance
  *
- * @author kehm
+ * @author karthik
  */
 public class RRCInstance {
 

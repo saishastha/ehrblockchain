@@ -1,6 +1,6 @@
 #!/bin/bash
 #SPDX-License-Identifier: Apache-2.0
-#Author: kehm
+#Author: karthik
 
 #Join peers to channel
 

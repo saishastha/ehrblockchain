@@ -4,7 +4,7 @@ package main.java.com.example.recordrelationshipcontract;
 /**
  * Enum class for entity types
  *
- * @author kehm
+ * @author karthik
  */
 public enum Entity {
     CLIENT("CLIENT"),

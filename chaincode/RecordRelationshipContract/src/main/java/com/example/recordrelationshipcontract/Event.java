@@ -4,7 +4,7 @@ package main.java.com.example.recordrelationshipcontract;
 /**
  * Enum class for events
  *
- * @author kehm
+ * @author karthik
  */
 public enum Event {
     READ("READ"),

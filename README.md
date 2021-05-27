@@ -1,7 +1,7 @@
 # HLF Network Package
 ## Hyperledger Fabric Blockchain Network for EHR Systems
 
-Related project: <https://github.com/kehm/ehrblockchainapplication>
+Related project: <https://github.com/karthik/ehrblockchainapplication>
 
 This software package is related to the following article and thesis:
 - (1) Yang et al., "A blockchain-based architecture for securing electronic health record systems", 2019, Concurrencry and Computation: Practice and Experience, <https://onlinelibrary.wiley.com/doi/10.1002/cpe.5479>

@@ -4,7 +4,7 @@ package main.java.com.example.recordrelationshipcontract;
 /**
  * Class to represent an entry in the log
  *
- * @author kehm
+ * @author karthik
  */
 public class LogEntry {
 

@@ -1,5 +1,5 @@
 # Copyright IBM Corp. All Rights Reserved.
-# Modifications by kehm
+# Modifications by karthik
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -64,7 +64,7 @@ Capabilities:
         V1_3: true
     Orderer: &OrdererCapabilities
         V1_1: true
-    Application: &ApplicationCapabilities
+    Applicatihyperledger/fabric-toolson: &ApplicationCapabilities
         V1_3: true
 
 Application: &ApplicationDefaults

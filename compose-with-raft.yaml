@@ -60,7 +60,7 @@ services:
     container_name: orderer0.hospital1.example.com
     networks:
       ehrnetwork:
-        ipv4_address: 172.18.0.100
+        ipv4_address: 3.141.166.35
       
   orderer0.pharmacy1.example.com:
     extends:
@@ -69,7 +69,7 @@ services:
     container_name: orderer0.pharmacy1.example.com
     networks:
       ehrnetwork:
-        ipv4_address: 172.18.0.110
+        ipv4_address: 3.141.166.35
 
   orderer0.practitioner1.example.com:
     extends:
@@ -78,7 +78,7 @@ services:
     container_name: orderer0.practitioner1.example.com
     networks:
       ehrnetwork:
-        ipv4_address: 172.18.0.120
+        ipv4_address: 3.141.166.35
 
   peer0.hospital1.example.com:
     container_name: peer0.hospital1.example.com

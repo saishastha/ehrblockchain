@@ -26,7 +26,7 @@ networks:
   ehrnetwork:
     ipam:
       config:
-        - subnet: 172.18.0.0/24
+        - subnet: 3.141.166.0/24
     
 services:
   ca.hospital1.example.com:

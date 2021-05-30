@@ -24,6 +24,7 @@ volumes:
 
 networks:
   ehrnetwork:
+    external: true
     ipam:
       config:
         - subnet: 3.141.166.0/24

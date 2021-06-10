@@ -15,7 +15,7 @@ echo "Creating docker containers:Start"
 docker-compose -f compose-with-raft.yaml -f compose-with-couchdb.yaml up -d #create docker containers
 echo "Creating docker containers:Done"
 echo "Waiting $1s for orderers to get ready"
-sleep $1s #wait for docker containers to finish startup
+sleep 1s #wait for docker containers to finish startup
 echo "Send create channel request:Start"
 docker exec -i cli0 bash < sample-setup/create-channel-request.sh &> /dev/null #create channel
 echo "Send create channel request:Done"

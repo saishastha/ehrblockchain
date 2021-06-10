@@ -136,7 +136,7 @@ services:
 
   cli0:
     container_name: cli0
-    image: hyperledger/fabric-tools
+    image: hyperledger/fabric-tools:2.3
     tty: true
     environment:
       - GOPATH=/opt/gopath

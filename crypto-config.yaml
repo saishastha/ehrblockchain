@@ -15,7 +15,7 @@ PeerOrgs:
         CommonName: orderer0.hospital1.example.com
         SANS:
           - "localhost"
-          - "172.18.0.242"
+          - "172.18.0.219"
       - Hostname: peer0
         CommonName: peer0.hospital1.example.com
         SANS:
@@ -35,7 +35,7 @@ PeerOrgs:
         CommonName: orderer0.pharmacy1.example.com
         SANS:
           - "localhost"
-          - "172.18.0.251"
+          - "172.18.0.228"
       - Hostname: peer0
         CommonName: peer0.pharmacy1.example.com
         SANS:
@@ -55,7 +55,7 @@ PeerOrgs:
         CommonName: orderer0.practitioner1.example.com
         SANS:
           - "localhost"
-          - "172.18.0.97"
+          - "172.18.0.160"
       - Hostname: peer0
         CommonName: peer0.practitioner1.example.com
         SANS:

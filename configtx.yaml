@@ -133,8 +133,9 @@ Channel: &ChannelDefaults
 
 Profiles:
     InitialOrgsOrdererGenesis:
-        Capabilities:
-            <<: *ChannelCapabilities
+        #Capabilities:
+         #   <<: *ChannelCapabilities
+        <<: *ChannelDefaults
         Orderer:
             <<: *OrdererDefaults
             Organizations:
@@ -151,6 +152,7 @@ Profiles:
                     - *Practitioner1
     InitialOrgsChannel:
         Consortium: ProviderConsortium
+        <<: *ChannelDefaults
         Application:
             <<: *ApplicationDefaults
             Organizations:

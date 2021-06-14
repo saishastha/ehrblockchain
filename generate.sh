@@ -9,7 +9,8 @@ echo "Running Cryptogen:Start"
 ./bin/cryptogen generate --config=./crypto-config.yaml #create cryptographic material
 echo "Running Cryptogen:Done"
 echo "Creating TrustStore:Start"
-./sample-setup/create-truststore.sh &> /dev/null
+sh ./sample-setup/create-truststore.sh
+#./sample-setup/create-truststore.sh &> /dev/null
 echo "Creating TrustStore:Done"
 export FABRIC_CFG_PATH=$PWD #setting Fabric configuration path
 mkdir channel-artifacts

@@ -17,10 +17,12 @@ echo "Creating docker containers:Done"
 echo "Waiting $1s for orderers to get ready"
 sleep 1s #wait for docker containers to finish startup
 echo "Send create channel request:Start"
-docker exec -i cli0 bash < sample-setup/create-channel-request.sh &> /dev/null #create channel
+docker exec -i cli0 bash < sample-setup/create-channel-request.sh
+#&> /dev/null #create channel
 echo "Send create channel request:Done"
 echo "Adding peers to channel:Start"
-docker exec -i cli0 bash < sample-setup/join-peers-to-channel.sh &> /dev/null #add peers to channel
+docker exec -i cli0 bash < sample-setup/join-peers-to-channel.sh
+ #&> /dev/null #add peers to channel
 echo "Adding peers to channel:Done"
 echo "Define anchor peers:Start"
 docker exec -i cli0 bash < sample-setup/define-anchor-peers.sh &> /dev/null #define anchor peers

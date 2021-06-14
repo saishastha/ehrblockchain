@@ -63,9 +63,9 @@ Capabilities:
     Channel: &ChannelCapabilities
         V2_0: true
     Orderer: &OrdererCapabilities
-        V1_1: true
+        V2_0: true
     Applicatihyperledger/fabric-toolson: &ApplicationCapabilities
-        V1_3: true
+        V2_0: true
 
 Application: &ApplicationDefaults
     Organizations:
@@ -116,6 +116,9 @@ Orderer: &OrdererDefaults
         Admins:
             Type: ImplicitMeta
             Rule: "MAJORITY Admins"
+        BlockValidation:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
 
 Channel: &ChannelDefaults
     Policies:
